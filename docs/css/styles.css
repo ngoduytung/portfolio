@@ -11,8 +11,8 @@
   --color-border: #DDDDDD;
   --color-placeholder-stripe: #E2E2E2;
 
-  --font-display: "Fraunces", Georgia, serif;
-  --font-ui: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Merriweather Sans", Arial, sans-serif;
+  --font-ui: "Fira Sans", "Helvetica Neue", Arial, sans-serif;
 
   --container-max: 1180px;
   --gutter: clamp(20px, 4vw, 64px);
@@ -287,7 +287,7 @@ button {
 }
 
 .hero__lang-block h1 {
-  font-size: clamp(1.7rem, 3.6vw, 2.6rem);
+  font-size: clamp(1.5rem, 3.2vw, 2.3rem);
   max-width: none;
 }
 
@@ -318,13 +318,40 @@ button {
   inset: 0;
   background-size: cover;
   background-position: center;
-  filter: grayscale(15%) contrast(1.02);
+  filter: grayscale(92%) contrast(1.05) brightness(0.97);
   transition: filter 0.6s var(--ease), transform 0.8s var(--ease);
 }
 
 .film-card:hover .film-card__still {
-  filter: grayscale(70%) contrast(1.08) brightness(0.85);
+  filter: grayscale(0%) contrast(1.02) brightness(1);
   transform: scale(1.03);
+}
+
+/* category badge — small, minimal, sits over the still regardless of theme */
+.film-card__category {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #FFFFFF;
+  background: rgba(19, 19, 19, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: opacity 0.4s var(--ease);
+}
+
+.film-card__category-icon {
+  width: 12px;
+  height: 12px;
+  color: currentColor;
+  flex: none;
 }
 
 /* sprocket strip — top and bottom, animates in on hover */
@@ -453,7 +480,7 @@ button {
 
 .film-hero__title {
   font-size: clamp(2rem, 5vw, 3.2rem);
-  max-width: 18ch;
+  max-width: 24ch;
 }
 
 .film-hero__meta {
@@ -497,6 +524,11 @@ button {
   font-size: 1.05rem;
   line-height: 1.7;
   max-width: 62ch;
+}
+
+.film-body__text--meta {
+  color: var(--color-text-muted);
+  font-size: 1rem;
 }
 
 .film-body__text + .film-body__text {
@@ -571,36 +603,369 @@ button {
 
 .credit-list li span:first-child { color: var(--color-text-muted); }
 
-.contact-content {
+/* =========================================================
+   Résumé (about page)
+   ========================================================= */
+.resume {
   padding-bottom: clamp(56px, 9vw, 100px);
+  border-top: 1px solid var(--color-border);
+  padding-top: clamp(40px, 7vw, 72px);
 }
 
-.contact-email {
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
-  display: inline-block;
-  border-bottom: 1px solid var(--color-text);
-  padding-bottom: 4px;
-  transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
+.resume__inner {
+  display: grid;
+  grid-template-columns: 0.6fr 1.4fr;
+  gap: clamp(28px, 5vw, 64px);
 }
 
-.contact-email:hover {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
+.resume-toggle {
+  grid-column: 2;
 }
 
-.contact-meta {
-  margin-top: 32px;
+@media (max-width: 760px) {
+  .resume__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-toggle {
+    grid-column: 1;
+  }
+}
+
+.resume-toggle__summary {
   display: flex;
-  gap: 28px;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  list-style: none;
+  padding: 4px 0;
 }
 
-.contact-meta a {
-  font-size: 0.85rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.resume-toggle__summary::-webkit-details-marker {
+  display: none;
+}
+
+.resume-toggle__label {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.resume-toggle__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.resume-toggle__hint {
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
   color: var(--color-text-muted);
 }
 
-.contact-meta a:hover { color: var(--color-accent); }
+.resume-toggle__hint-open {
+  display: none;
+}
+
+.resume-toggle[open] .resume-toggle__hint-closed {
+  display: none;
+}
+
+.resume-toggle[open] .resume-toggle__hint-open {
+  display: inline;
+}
+
+.resume-toggle__icon {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.resume-toggle__icon::before,
+.resume-toggle__icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: var(--color-text);
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
+}
+
+.resume-toggle__icon::before {
+  width: 14px;
+  height: 1px;
+}
+
+.resume-toggle__icon::after {
+  width: 1px;
+  height: 14px;
+}
+
+.resume-toggle[open] .resume-toggle__icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+  opacity: 0;
+}
+
+.resume-toggle__content {
+  padding-top: clamp(28px, 5vw, 48px);
+}
+
+.resume__group {
+  margin-bottom: clamp(28px, 5vw, 44px);
+}
+
+.resume__group-title {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 14px;
+}
+
+.resume-list {
+  border-top: 1px solid var(--color-border);
+}
+
+.resume-list li {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.92rem;
+}
+
+.resume-list__row {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.resume-list__year {
+  flex: 0 0 11ch;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+}
+
+.resume-list__project {
+  font-family: var(--font-display);
+  font-size: 1rem;
+}
+
+.resume-list__details {
+  margin-top: 6px;
+  padding-left: calc(11ch + 16px);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.resume-list__details a {
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.25s var(--ease);
+}
+
+.resume-list__details a:hover {
+  color: var(--color-accent);
+}
+
+/* Skills entries: no year column, so no indent */
+.resume-list--plain .resume-list__project {
+  display: block;
+}
+
+.resume-list--plain .resume-list__details {
+  padding-left: 0;
+}
+
+@media (max-width: 600px) {
+  .resume-list__row {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .resume-list__details {
+    padding-left: 0;
+  }
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag-list li {
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  padding: 6px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text-muted);
+}
+
+.resume__cv-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--color-text);
+  transition: color 0.25s var(--ease);
+}
+
+.resume__cv-link:hover {
+  color: var(--color-accent);
+}
+
+.contact-content {
+  padding-bottom: clamp(56px, 9vw, 100px);
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(28px, 5vw, 64px);
+  align-items: start;
+}
+
+@media (max-width: 760px) {
+  .contact-content { grid-template-columns: 1fr; }
+}
+
+.contact-text {
+  max-width: 62ch;
+}
+
+.contact-text p {
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.contact-text p + p {
+  margin-top: 16px;
+}
+
+.contact-links-block {
+  margin-top: clamp(32px, 6vw, 56px);
+  padding-top: clamp(28px, 5vw, 48px);
+  border-top: 1px solid var(--color-border);
+}
+
+.contact-links-block > p {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  margin-bottom: 14px;
+}
+
+.contact-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.contact-links a {
+  font-size: 0.95rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--color-text);
+  transition: color 0.25s var(--ease);
+}
+
+.contact-links a:hover {
+  color: var(--color-accent);
+}
+
+.contact-still {
+  margin: 0;
+}
+
+.contact-still .film-card__still {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  inset: auto;
+}
+
+.contact-still figcaption {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+/* =========================================================
+   Writings page
+   ========================================================= */
+.writings-content {
+  padding-bottom: clamp(56px, 9vw, 100px);
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(28px, 5vw, 64px);
+  align-items: start;
+}
+
+@media (max-width: 760px) {
+  .writings-content { grid-template-columns: 1fr; }
+}
+
+.writing-list__item + .writing-list__item {
+  margin-top: clamp(28px, 4vw, 40px);
+}
+
+.writing-list__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.writing-list__title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+.writing-list__title a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.25s var(--ease);
+}
+
+.writing-list__title a:hover {
+  color: var(--color-accent);
+}
+
+.writing-list__year {
+  flex: none;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.writing-list__details {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  max-width: 58ch;
+}
+
+.writings-still {
+  margin: 0;
+}
+
+.writings-still .film-card__still {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  inset: auto;
+}
+
+.writings-still figcaption {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
